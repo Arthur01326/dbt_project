@@ -1,0 +1,18 @@
+-- обычное добавления данных по условию
+-- тут в условии where неправильное сравнения, нужно приводить типы к инту
+{{
+    config(
+        materialized = 'incremental',
+        incremental_strategy = 'append',
+        tags = ['bookings']
+    )
+}}
+select 
+     book_ref
+    ,book_date
+    ,total_amount    
+from {{ source('demo_src', 'bookings') }}
+{% if is_incremental() %}
+  where 
+    book_ref > (select max(book_ref) from {{ this }})
+{% endif %}
