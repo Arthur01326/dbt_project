@@ -1,0 +1,36 @@
+models:
+  - name: fct_bookings
+    description: Факты бронирования
+    docs:
+      show: true #показывать в документации
+      node_color: red #цвет в ланейджи
+    latest_version: 1 #версия проекта(для разных команд)
+    versions:
+      - v: 1
+    config:
+      contract: {enforced: true} #указание контракта для работы constraints
+    meta: #метаинформация попадет в доки
+      owner: "email@gmail.com"
+      contact_tg: user123
+      status: in_dev
+
+
+    columns: #проверка для колонок модели
+      - name: book_ref
+        data_type: varchar(8) #проверка типа данных
+        constraints:
+          - type: not_null #проверка на нулли
+      - name: book_date
+        data_type: timestamptz
+      - name: total_amount
+        data_type: numeric(10,2)
+        constraints:
+          - type: check #проверка выражения
+            expression: "total_amount > 0"
+        tests: #тест 
+          - not_null
+        meta: #инфа в доки
+          owner: user123
+        quote: true #обромление наз. колонки в ковычки в запросе(если на русском или спец сим.)
+        
+
